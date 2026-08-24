@@ -1,0 +1,21 @@
+baseURL = "https://zycr.zj991212.workers.dev/"
+languageCode = "zh-cn"
+title = "ZYCR"
+enableRobotsTXT = true
+
+[params]
+description = "Personal research, engineering and knowledge archive."
+
+[taxonomies]
+tag = "tags"
+
+[markup]
+
+  [markup.goldmark]
+
+    [markup.goldmark.renderer]
+    unsafe = true
+
+  [markup.highlight]
+  lineNos = false
+  noClasses = false
