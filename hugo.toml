@@ -3,6 +3,9 @@ languageCode = "zh-cn"
 title = "ZYCR"
 
 enableRobotsTXT = true
+enableGitInfo = true
+buildFuture = true
+timeZone = "Asia/Shanghai"
 
 [params]
 description = "Personal research, engineering and knowledge archive."
