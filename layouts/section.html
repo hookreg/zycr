@@ -1,5 +1,34 @@
 {{ define "main" }}
 
+<!-- ==========================================
+     SECTION NAVIGATION
+     ========================================== -->
+
+<nav class="local-nav">
+
+  {{ with .Parent }}
+
+    {{ if .IsHome }}
+
+      <a href="/">
+        [ ← RETURN HOME ]
+      </a>
+
+    {{ else }}
+
+      <a href="{{ .RelPermalink }}">
+        [ ← RETURN {{ upper .Title }} ]
+      </a>
+
+      <a href="/">
+        [ HOME ]
+      </a>
+
+    {{ end }}
+
+  {{ end }}
+
+</nav>
 
 <!-- ==========================================
      SECTION HEADER
