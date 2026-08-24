@@ -1,0 +1,128 @@
+{{ define "main" }}
+
+
+<pre class="logo">
+███████╗██╗   ██╗ ██████╗██████╗
+╚══███╔╝╚██╗ ██╔╝██╔════╝██╔══██╗
+  ███╔╝  ╚████╔╝ ██║     ██████╔╝
+ ███╔╝    ╚██╔╝  ██║     ██╔══██╗
+███████╗   ██║   ╚██████╗██║  ██║
+╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝
+</pre>
+
+
+<div class="system-title">
+  PERSONAL ACCESS NODE
+</div>
+
+
+<div class="system-info">
+
+  <p>
+    <span class="label">NODE STATUS</span>
+    <span class="status">ONLINE</span>
+  </p>
+
+  <p>
+    <span class="label">ACCESS</span>
+    PUBLIC
+  </p>
+
+  <p>
+    <span class="label">PROTOCOL</span>
+    HTTPS
+  </p>
+
+  <p>
+    <span class="label">NODE TYPE</span>
+    KNOWLEDGE ARCHIVE
+  </p>
+
+</div>
+
+
+<section>
+
+  <div class="section-title">
+    [ SYSTEM DIRECTORY ]
+  </div>
+
+  <div class="directory">
+
+    <a href="/publications/">
+      &gt; [01] PUBLICATIONS
+    </a>
+
+    <div class="sub-directory">
+
+      <a href="/publications/papers/">
+        ├─ PAPERS
+      </a>
+
+      <a href="/publications/code/">
+        └─ CODE
+      </a>
+
+    </div>
+
+
+    <a href="/projects/">
+      &gt; [02] PROJECTS
+    </a>
+
+    <a href="/devlog/">
+      &gt; [03] DEVLOG
+    </a>
+
+    <a href="/qa/">
+      &gt; [04] Q&A
+    </a>
+
+    <a href="/about/">
+      &gt; [05] WHOAMI
+    </a>
+
+  </div>
+
+</section>
+
+
+<section>
+
+  <div class="section-title">
+    [ LATEST TRANSMISSIONS ]
+  </div>
+
+
+  {{ range first 8 .Site.RegularPages.ByDate.Reverse }}
+
+    {{ $kind := .Params.entry_type | default .Section }}
+
+    <div class="transmission">
+
+      <span class="date">
+        {{ .Date.Format "2006-01-02" }}
+      </span>
+
+      <span class="tag">
+        [{{ upper $kind }}]
+      </span>
+
+      <a href="{{ .RelPermalink }}">
+        {{ .Title }}
+      </a>
+
+    </div>
+
+  {{ else }}
+
+    <p class="muted">
+      NO TRANSMISSIONS FOUND.
+    </p>
+
+  {{ end }}
+
+</section>
+
+
+{{ end }}
