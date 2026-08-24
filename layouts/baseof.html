@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    {{ if .IsHome }}
+      ZYCR // PERSONAL ACCESS NODE
+    {{ else }}
+      {{ .Title }} // ZYCR
+    {{ end }}
+  </title>
+
+  <meta
+    name="description"
+    content="{{ with .Description }}{{ . }}{{ else }}ZYCR personal research, engineering and knowledge archive.{{ end }}"
+  >
+
+  <meta
+    name="robots"
+    content="index, follow"
+  >
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/terminal.css"
+  >
+
+
+  <!-- 数学公式 -->
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ],
+        displayMath: [
+          ['$$', '$$'],
+          ['\\[', '\\]']
+        ]
+      }
+    };
+  </script>
+
+  <script
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
+</head>
+
+
+<body>
+
+<main class="terminal">
+
+  <div class="topbar">
+
+    <span>
+      ZYCR NETWORK // PUBLIC TERMINAL
+    </span>
+
+    <span class="status">
+      ONLINE
+    </span>
+
+  </div>
+
+
+  <nav class="global-nav">
+
+    <a href="/">[00] HOME</a>
+
+    <a href="/publications/">[01] PUBLICATIONS</a>
+
+    <a href="/projects/">[02] PROJECTS</a>
+
+    <a href="/devlog/">[03] DEVLOG</a>
+
+    <a href="/qa/">[04] Q&A</a>
+
+    <a href="/about/">[05] WHOAMI</a>
+
+  </nav>
+
+
+  {{ block "main" . }}
+  {{ end }}
+
+
+  <footer>
+
+    <span class="prompt">
+      guest@zycr:~$
+    </span>
+
+    <span class="cursor">
+      █
+    </span>
+
+  </footer>
+
+</main>
+
+</body>
+
+</html>
