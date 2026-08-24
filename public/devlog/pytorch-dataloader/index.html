@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+  <!-- =====================================================
+       基础页面设置
+       一般不要改
+       ===================================================== -->
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+
+  <!-- =====================================================
+       SEO 信息
+       每篇文章都要修改
+       ===================================================== -->
+
+  <meta
+    name="description"
+    content="这里填写文章简介，建议 50 到 150 字。"
+  >
+
+  <meta
+    name="keywords"
+    content="PyTorch, DataLoader, Deep Learning, Tutorial"
+  >
+
+  <meta
+    name="robots"
+    content="index, follow"
+  >
+
+
+  <!-- =====================================================
+       浏览器标签页标题
+       修改这里
+       ===================================================== -->
+
+  <title>
+    从零理解 PyTorch DataLoader // ZYCR
+  </title>
+
+
+  <!-- =====================================================
+       终端/BBS主题
+       不要删除
+       ===================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/terminal.css"
+  >
+
+
+  <!-- =====================================================
+       MathJax 数学公式
+       不要删除
+       ===================================================== -->
+
+  <script>
+    window.MathJax = {
+
+      tex: {
+
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ],
+
+        displayMath: [
+          ['$$', '$$'],
+          ['\\[', '\\]']
+        ]
+
+      },
+
+      svg: {
+        fontCache: 'global'
+      }
+
+    };
+  </script>
+
+
+  <script
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
+</head>
+
+
+
+<body>
+
+
+<main class="terminal">
+
+
+  <!-- =====================================================
+       顶部状态栏
+       ===================================================== -->
+
+  <div class="topbar">
+
+    <span>
+      ZYCR NETWORK // DEVELOPMENT LOG
+    </span>
+
+    <span class="status">
+      ONLINE
+    </span>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       文章头部
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ DEV-001 ]
+    </div>
+
+
+    <!--
+      H1 = 整篇文章唯一的大标题
+
+      一篇文章原则上只放一个 H1
+    -->
+
+    <h1>
+      从零理解 PyTorch DataLoader
+    </h1>
+
+
+    <div class="record-meta">
+
+      TYPE: TUTORIAL
+
+      ·
+
+      DATE: 2026-08-25
+
+      ·
+
+      TAGS:
+      PYTORCH / DATALOADER / DEEP LEARNING
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       摘要
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ ABSTRACT ]
+    </div>
+
+
+    <div class="article-body">
+
+      <p>
+        这里用两到三段话简单介绍：
+        为什么要写这篇文章、这篇文章解决什么问题、
+        读完以后能够学到什么。
+      </p>
+
+      <p>
+        不需要写成论文 Abstract。
+        正常说人话即可。
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第一大章节
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 01 // BASIC CONCEPT ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <!-- H2 = 一级正文标题 -->
+
+      <h2>
+        1. DataLoader 是什么？
+      </h2>
+
+
+      <p>
+        这里填写普通正文。
+      </p>
+
+
+      <p>
+        每一段文字最好放在一个
+        &lt;p&gt;
+        标签里面。
+      </p>
+
+
+      <p>
+        例如，我们可以把
+        <strong>Dataset</strong>
+        理解为数据仓库，
+        而把
+        <strong>DataLoader</strong>
+        理解为数据搬运工。
+      </p>
+
+
+      <p>
+        如果你需要强调一个术语，
+        可以使用
+        <em>斜体</em>
+        或者
+        <strong>粗体</strong>。
+      </p>
+
+
+      <p>
+        如果正文里面出现一个变量或者命令，
+        可以写成
+        <code>batch_size</code>
+        这样的行内代码。
+      </p>
+
+
+
+      <!-- H3 = 二级正文标题 -->
+
+      <h3>
+        1.1 Dataset 和 DataLoader 的区别
+      </h3>
+
+
+      <p>
+        Dataset 决定一条数据是什么。
+      </p>
+
+
+      <p>
+        DataLoader 决定这些数据如何被组合，
+        并送入模型。
+      </p>
+
+
+
+      <!-- H4 = 三级正文标题 -->
+
+      <h4>
+        1.1.1 Dataset 的职责
+      </h4>
+
+
+      <p>
+        Dataset 通常需要实现
+        <code>__len__</code>
+        和
+        <code>__getitem__</code>。
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第二章节：列表
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 02 // LISTS ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        2. 核心组成部分
+      </h2>
+
+
+      <p>
+        DataLoader 涉及几个比较重要的概念：
+      </p>
+
+
+      <!-- 无序列表 -->
+
+      <ul>
+
+        <li>
+          Dataset
+        </li>
+
+        <li>
+          Batch
+        </li>
+
+        <li>
+          Shuffle
+        </li>
+
+        <li>
+          Sampler
+        </li>
+
+        <li>
+          Worker
+        </li>
+
+      </ul>
+
+
+
+      <h3>
+        2.1 学习顺序
+      </h3>
+
+
+      <!-- 有序列表 -->
+
+      <ol>
+
+        <li>
+          先理解 Dataset。
+        </li>
+
+        <li>
+          再理解 Batch。
+        </li>
+
+        <li>
+          理解 Shuffle。
+        </li>
+
+        <li>
+          最后学习多进程读取。
+        </li>
+
+      </ol>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第三章节：提示 / 引用
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 03 // NOTES ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        3. 一个容易混淆的问题
+      </h2>
+
+
+      <blockquote>
+
+        DataLoader 并不是用来保存数据的。
+
+        它只是负责按照指定策略从 Dataset
+        中取出数据。
+
+      </blockquote>
+
+
+      <p>
+        <strong>
+          注意：
+        </strong>
+
+        如果你的数据读取速度很慢，
+        不一定是 GPU 的问题，
+        也可能是数据加载过程成为了瓶颈。
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第四章节：图片
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 04 // FIGURE ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        4. DataLoader 工作流程
+      </h2>
+
+
+      <p>
+        这里准备插入一张工作流程图。
+      </p>
+
+
+      <!--
+        图片上传位置：
+
+        public/assets/img/
+
+        例如：
+
+        public/assets/img/dataloader-flow.png
+      -->
+
+
+      <figure>
+
+        <img
+          src="/assets/img/dataloader-flow.png"
+          alt="PyTorch DataLoader 工作流程图"
+        >
+
+
+        <figcaption>
+
+          Figure 1.
+          PyTorch DataLoader 的基本工作流程。
+
+        </figcaption>
+
+      </figure>
+
+
+      <p>
+        如图所示，
+        Dataset 首先负责提供单个样本，
+        DataLoader 再负责将样本组织成 Batch。
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第五章节：数学公式
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 05 // MATHEMATICS ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        5. 数学表示
+      </h2>
+
+
+      <h3>
+        5.1 行内公式
+      </h3>
+
+
+      <p>
+        假设一个 mini-batch
+        包含 $B$ 个样本，
+        每个样本的特征维度为 $d$。
+      </p>
+
+
+      <p>
+        那么输入矩阵可以表示为
+        $\mathbf{X}\in\mathbb{R}^{B\times d}$。
+      </p>
+
+
+
+      <h3>
+        5.2 独立公式
+      </h3>
+
+
+      <p>
+        一个简单的线性变换可以写成：
+      </p>
+
+
+      $$
+
+      \mathbf{H}
+      =
+      \mathbf{X}
+      \mathbf{W}
+      +
+      \mathbf{b}
+
+      $$
+
+
+
+      <h3>
+        5.3 损失函数
+      </h3>
+
+
+      <p>
+        例如均方误差：
+      </p>
+
+
+      $$
+
+      \mathcal{L}
+      =
+      \frac{1}{N}
+      \sum_{i=1}^{N}
+      \left(
+        y_i-\hat{y}_i
+      \right)^2
+
+      $$
+
+
+
+      <h3>
+        5.4 多行公式
+      </h3>
+
+
+      $$
+
+      \begin{aligned}
+
+      \mathbf{q}
+      &=
+      \mathbf{W}_q\mathbf{x},
+      \\
+
+      \mathbf{k}
+      &=
+      \mathbf{W}_k\mathbf{x},
+      \\
+
+      \mathbf{v}
+      &=
+      \mathbf{W}_v\mathbf{x}.
+
+      \end{aligned}
+
+      $$
+
+
+
+      <h4>
+        5.4.1 Attention 示例
+      </h4>
+
+
+      $$
+
+      \operatorname{Attention}
+      (\mathbf{Q},\mathbf{K},\mathbf{V})
+
+      =
+
+      \operatorname{softmax}
+      \left(
+
+        \frac{
+          \mathbf{Q}\mathbf{K}^{\top}
+        }{
+          \sqrt{d_k}
+        }
+
+      \right)
+
+      \mathbf{V}
+
+      $$
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第六章节：Python 代码
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 06 // PYTHON ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        6. Python 示例
+      </h2>
+
+
+      <p>
+        一个最简单的 DataLoader：
+      </p>
+
+
+      <pre><code>import torch
+
+from torch.utils.data import (
+    Dataset,
+    DataLoader
+)
+
+
+class MyDataset(Dataset):
+
+    def __init__(self):
+        self.data = torch.randn(100, 512)
+
+
+    def __len__(self):
+        return len(self.data)
+
+
+    def __getitem__(self, index):
+        return self.data[index]
+
+
+dataset = MyDataset()
+
+
+loader = DataLoader(
+    dataset,
+    batch_size=32,
+    shuffle=True
+)
+
+
+for batch in loader:
+
+    print(batch.shape)</code></pre>
+
+
+      <p>
+        这里可以继续解释每一段代码的作用。
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第七章节：Shell / Linux
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 07 // TERMINAL ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        7. Shell 命令
+      </h2>
+
+
+      <pre><code>python train.py
+
+python test.py
+
+nvidia-smi</code></pre>
+
+
+      <p>
+        终端命令同样使用
+        &lt;pre&gt;&lt;code&gt;
+        标签。
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第八章节：JSON / 配置文件
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 08 // CONFIGURATION ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        8. 配置文件示例
+      </h2>
+
+
+      <pre><code>{
+  "batch_size": 32,
+  "learning_rate": 0.001,
+  "epochs": 100
+}</code></pre>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第九章节：终端输出
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 09 // OUTPUT ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        9. 程序输出
+      </h2>
+
+
+      <pre><code>Epoch 1/100
+
+Loss: 0.3812
+
+Accuracy: 84.31%
+
+Training complete.</code></pre>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第十章节：表格
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 10 // TABLE ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        10. 参数对比
+      </h2>
+
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              参数
+            </th>
+
+            <th>
+              数值
+            </th>
+
+            <th>
+              说明
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr>
+
+            <td>
+              batch_size
+            </td>
+
+            <td>
+              32
+            </td>
+
+            <td>
+              每个 Batch 的样本数量
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              shuffle
+            </td>
+
+            <td>
+              True
+            </td>
+
+            <td>
+              每轮训练重新打乱数据
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              num_workers
+            </td>
+
+            <td>
+              4
+            </td>
+
+            <td>
+              数据加载进程数量
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       第十一章节：外部链接
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ 11 // LINKS ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        11. 相关资源
+      </h2>
+
+
+      <p>
+
+        项目代码：
+
+        <a
+          href="https://github.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          GitHub Repository
+
+        </a>
+
+      </p>
+
+
+      <p>
+
+        官方文档：
+
+        <a
+          href="https://pytorch.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          PyTorch
+
+        </a>
+
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       总结
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ SUMMARY ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <h2>
+        总结
+      </h2>
+
+
+      <p>
+        这篇文章主要介绍了以下几个内容：
+      </p>
+
+
+      <ul>
+
+        <li>
+          Dataset 的作用。
+        </li>
+
+        <li>
+          DataLoader 的作用。
+        </li>
+
+        <li>
+          Batch 的组织方式。
+        </li>
+
+        <li>
+          DataLoader 的基本代码实现。
+        </li>
+
+      </ul>
+
+
+      <p>
+        最简单可以把整个流程理解成：
+      </p>
+
+
+      <pre><code>Raw Data
+    ↓
+Dataset
+    ↓
+DataLoader
+    ↓
+Batch
+    ↓
+Model</code></pre>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       参考文献
+       ===================================================== -->
+
+  <section>
+
+    <div class="section-title">
+      [ REFERENCES ]
+    </div>
+
+
+    <div class="article-body">
+
+
+      <ol>
+
+        <li>
+
+          <a
+            href="https://pytorch.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            PyTorch Documentation
+
+          </a>
+
+        </li>
+
+
+        <li>
+
+          <a
+            href="https://example.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            第二个参考资料
+
+          </a>
+
+        </li>
+
+      </ol>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       页面底部
+       ===================================================== -->
+
+  <footer>
+
+
+    <div>
+
+      <a href="/devlog/">
+        &lt; RETURN DEVLOG
+      </a>
+
+    </div>
+
+
+    <div>
+
+      <a href="/">
+        &lt; RETURN HOME
+      </a>
+
+    </div>
+
+
+    <div style="margin-top: 15px;">
+
+      <span class="prompt">
+        guest@zycr:~$
+      </span>
+
+      <span class="cursor">
+        █
+      </span>
+
+    </div>
+
+
+  </footer>
+
+
+</main>
+
+
+</body>
+
+</html>
