@@ -1,10 +1,14 @@
 {{ define "main" }}
 
 
-<section>
+<!-- ==========================================
+     SECTION HEADER
+     ========================================== -->
+
+<section class="section-header">
 
   <div class="section-title">
-    [ {{ upper .Title }} ]
+    [ {{ upper .Title }} DIRECTORY ]
   </div>
 
 
@@ -19,119 +23,204 @@
 </section>
 
 
+
+<!-- ==========================================
+     SUB DIRECTORIES
+     例如 Publications -> Papers / Code
+     ========================================== -->
+
 {{ if .Sections }}
 
 <section>
 
   <div class="section-title">
-    [ SUB-DATABASES ]
+    [ SUB-DIRECTORIES ]
   </div>
 
 
-  {{ range .Sections.ByTitle }}
+  <div class="subsection-directory">
 
-    <article class="record">
+    {{ range .Sections.ByTitle }}
 
-      <div class="record-id">
-        DIRECTORY
-      </div>
+      <a
+        class="subsection-entry"
+        href="{{ .RelPermalink }}"
+      >
 
-      <h2 class="record-title">
+        <span class="directory-marker">
+          &gt;
+        </span>
 
-        <a href="{{ .RelPermalink }}">
-          {{ .Title }}
-        </a>
+        <span class="directory-name">
+          {{ upper .Title }}
+        </span>
 
-      </h2>
+        {{ with .Description }}
 
-      {{ with .Description }}
+          <span class="directory-description">
+            {{ . }}
+          </span>
 
-        <p class="record-description">
-          {{ . }}
-        </p>
+        {{ end }}
 
-      {{ end }}
+      </a>
 
-    </article>
+    {{ end }}
 
-  {{ end }}
+  </div>
 
 </section>
 
 {{ end }}
 
 
-<section>
 
-  <div class="section-title">
-    [ RECORDS ]
-  </div>
+<!-- ==========================================
+     CHAPTER DIRECTORY
+     ========================================== -->
 
-
-  {{ range .RegularPages.ByDate.Reverse }}
-
-    <article class="record">
+{{ $pages := .RegularPages }}
 
 
-      <div class="record-id">
+{{ if gt (len $pages) 0 }}
 
-        {{ with .Params.id }}
-          {{ . }}
-        {{ else }}
-          RECORD
+
+  {{ range $pages.GroupByParam "chapter" }}
+
+
+    <!-- 当前章节 -->
+
+    <section class="chapter-group">
+
+
+      <div class="chapter-header">
+
+        <span class="chapter-number">
+
+          CHAPTER {{ .Key }}
+
+        </span>
+
+
+        <!--
+        从本章节第一篇文章中读取 chapter_title
+        -->
+
+        {{ with index .Pages 0 }}
+
+          {{ with .Params.chapter_title }}
+
+            <span class="chapter-divider">
+              //
+            </span>
+
+            <span class="chapter-name">
+              {{ upper . }}
+            </span>
+
+          {{ end }}
+
         {{ end }}
 
       </div>
 
 
-      <h2 class="record-title">
 
-        <a href="{{ .RelPermalink }}">
-          {{ .Title }}
-        </a>
-
-      </h2>
+      <div class="chapter-entries">
 
 
-      <div class="record-meta">
+        {{ range .Pages.ByWeight }}
 
-        {{ .Lastmod.Format "2006-01-02" }}
 
-        {{ with .Params.entry_type }}
+          <article class="directory-entry">
 
-          · {{ upper . }}
+
+            <!-- 当前章内部编号 -->
+
+            <div class="directory-index">
+
+              {{ printf "%02d" .Weight }}
+
+            </div>
+
+
+
+            <!-- 标题和简介 -->
+
+            <div class="directory-content">
+
+
+              <a
+                class="directory-title"
+                href="{{ .RelPermalink }}"
+              >
+
+                {{ .Title }}
+
+              </a>
+
+
+
+              {{ with .Description }}
+
+                <div class="directory-summary">
+
+                  {{ . }}
+
+                </div>
+
+              {{ end }}
+
+
+
+              <!-- Tags -->
+
+              {{ with .Params.tags }}
+
+                <div class="directory-meta">
+
+                  {{ delimit . " / " }}
+
+                </div>
+
+              {{ end }}
+
+
+            </div>
+
+
+          </article>
+
 
         {{ end }}
 
-        {{ with .Params.tags }}
-
-          · {{ delimit . " / " }}
-
-        {{ end }}
 
       </div>
 
 
-      {{ with .Description }}
+    </section>
 
-        <p class="record-description">
-          {{ . }}
-        </p>
-
-      {{ end }}
-
-
-    </article>
-
-  {{ else }}
-
-    <p class="muted">
-      NO RECORDS FOUND.
-    </p>
 
   {{ end }}
 
+
+{{ else }}
+
+
+<section>
+
+  <div class="section-title">
+    [ DIRECTORY ]
+  </div>
+
+  <p class="muted">
+    NO RECORDS FOUND.
+  </p>
+
 </section>
+
+
+{{ end }}
 
 
 {{ end }}
