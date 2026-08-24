@@ -197,10 +197,20 @@ a:hover {
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "calt" 0;
 
+  /* 保留横向滚动能力，但隐藏所有滚动条 */
   overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   text-shadow:
     0 0 6px rgba(117, 255, 102, 0.30);
+}
+
+/* Chrome / Edge / Safari 隐藏滚动条 */
+.logo::-webkit-scrollbar {
+  display: none;
 }
 
 
