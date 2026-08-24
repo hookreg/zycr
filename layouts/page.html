@@ -1,0 +1,85 @@
+{{ define "main" }}
+
+
+<article>
+
+
+  <header class="article-header">
+
+    <div class="section-title">
+
+      [
+      {{ with .Params.id }}
+        {{ . }}
+      {{ else }}
+        RECORD
+      {{ end }}
+      ]
+
+    </div>
+
+
+    <h1>
+      {{ .Title }}
+    </h1>
+
+
+    <div class="record-meta">
+
+      DATE:
+      {{ .Date.Format "2006-01-02" }}
+
+      {{ with .Params.entry_type }}
+
+        · TYPE:
+        {{ upper . }}
+
+      {{ end }}
+
+      {{ with .Params.tags }}
+
+        · TAGS:
+        {{ delimit . " / " }}
+
+      {{ end }}
+
+    </div>
+
+
+    {{ with .Description }}
+
+      <p class="article-description">
+        {{ . }}
+      </p>
+
+    {{ end }}
+
+  </header>
+
+
+
+  <div class="article-body">
+
+    {{ .Content }}
+
+  </div>
+
+
+</article>
+
+
+
+<div class="article-return">
+
+  {{ with .Parent }}
+
+    <a href="{{ .RelPermalink }}">
+      &lt; RETURN {{ upper .Title }}
+    </a>
+
+  {{ end }}
+
+</div>
+
+
+{{ end }}
