@@ -1,75 +1,1972 @@
 ---
-id: "DEV-001"
-title: "我的第一篇 Markdown 技术日志"
+
+title: "我是如何搭建这个复古终端风个人博客的"
 date: 2026-08-25
 draft: false
-
 entry_type: "tutorial"
-
 tags:
-  - Hugo
-  - Blog
 
-description: "测试新的 Markdown 自动博客系统。"
+* Hugo
+* GitHub
+* Cloudflare
+* HTML
+* CSS
+* Blog
+  description: "从 HTML、CSS、Markdown 到 Hugo、GitHub 和 Cloudflare Workers，完整记录这个复古 Terminal/BBS 风个人博客是如何从零搭建起来的。"
+
 ---
 
-这是我的第一篇 Markdown 技术日志。
+如果你现在正在阅读这篇文章，那么说明这套系统至少还活着。
 
-如果这里能正常显示，说明 Markdown 博客已经成功。
+而这篇文章，恰好就是这个网站发布的第一篇正式教程。
 
-## 1. 一级正文标题
+我想做的并不是一个普通的博客。
 
-这里是普通正文。
+我不太喜欢那种非常标准的：
 
-正文应该明显比标题更低调、更适合长时间阅读。
+> 顶部导航栏 + 白色背景 + 两列卡片 + 圆角按钮
 
-### 1.1 二级正文标题
+它们当然没有什么问题，只是互联网已经有足够多这种页面了。
 
-继续写正文。
+我更想做一个像是从上世纪某台机器里挖出来的个人节点：
 
-#### 1.1.1 三级正文标题
+```text
+ZYCR NETWORK // PUBLIC TERMINAL
 
-更细一级的内容。
+STATUS ........ ONLINE
+ACCESS ........ PUBLIC
+PROTOCOL ...... HTTPS
+
+[ SYSTEM DIRECTORY ]
+
+> [01] PUBLICATIONS
+> [02] PROJECTS
+> [03] DEVLOG
+> [04] Q&A
+> [05] WHOAMI
+
+guest@zycr:~$ █
+```
+
+黑色背景、绿色字符、CRT 扫描线、终端光标，以及一种老式 BBS 的味道。
+
+但有一个前提：
+
+**我不想每写一篇文章，都去手搓一个 HTML 页面。**
+
+所以最后，我把整个网站做成了这样：
+
+```text
+Markdown
+    ↓
+Hugo
+    ↓
+HTML + CSS
+    ↓
+GitHub
+    ↓
+Cloudflare Workers
+    ↓
+Internet
+```
+
+这篇文章就从这条链路开始，彻底解释它到底是怎么工作的。
+
+---
+
+## 1. 先理解：一个网站到底是什么？
+
+很多第一次接触 Web 的人，会把“网站”理解成一个整体。
+
+实际上，一个最基础的网站可以拆成三个东西：
+
+```text
+HTML
+CSS
+JavaScript
+```
+
+如果用人体来比喻：
+
+```text
+HTML        = 骨架
+
+CSS         = 长相、衣服和装修
+
+JavaScript  = 动作和行为
+```
+
+而我这个博客的主体其实非常简单：
+
+```text
+HTML + CSS
+```
+
+甚至暂时都不需要太多 JavaScript。
+
+---
+
+## 2. HTML 到底是什么？
+
+HTML 的全称是：
+
+**HyperText Markup Language**
+
+中文一般叫：
+
+**超文本标记语言。**
+
+这个名字听起来像某种需要考试的东西，但它其实没那么神秘。
+
+HTML 的核心任务只有一个：
+
+> 告诉浏览器，“这块内容是什么”。
+
+例如：
+
+```html
+<h1>我的第一篇文章</h1>
+```
+
+不是在告诉浏览器：
+
+> “把这句话弄得特别大特别帅。”
+
+它真正表达的是：
+
+> “这句话是这个页面最重要的一级标题。”
+
+同理：
+
+```html
+<p>这是一段正文。</p>
+```
+
+表示：
+
+> 这是一段 Paragraph，也就是正文段落。
+
+链接：
+
+```html
+<a href="/devlog/">
+  打开开发日志
+</a>
+```
+
+表示：
+
+> 这是一条链接，点击以后跳到 `/devlog/`。
+
+所以 HTML 本质上是一套**结构描述语言**。
+
+---
+
+### 2.1 一个最简单的 HTML 页面
+
+最基础的 HTML 页面可以长这样：
+
+```html
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>
+    我的博客
+  </title>
+
+</head>
+
+<body>
+
+  <h1>
+    Hello World
+  </h1>
+
+  <p>
+    这是我的第一篇文章。
+  </p>
+
+</body>
+
+</html>
+```
+
+你可以把它理解成：
+
+```text
+html
+│
+├── head
+│   └── 网页自身的信息
+│
+└── body
+    └── 真正显示给用户看的东西
+```
+
+其中：
+
+```html
+<head>
+```
+
+通常放：
+
+* 网页标题
+* SEO 信息
+* CSS
+* 字符编码
+* 页面描述
+
+而：
+
+```html
+<body>
+```
+
+才是用户看到的页面内容。
+
+---
+
+### 2.2 HTML 的标签是什么？
+
+像：
+
+```html
+<h1>
+<p>
+<a>
+<img>
+```
+
+这些东西叫 **Tag，也就是标签**。
+
+常用标签其实没多少。
+
+标题：
+
+```html
+<h1>文章标题</h1>
+
+<h2>一级章节</h2>
+
+<h3>二级章节</h3>
+
+<h4>三级章节</h4>
+```
+
+正文：
+
+```html
+<p>
+这里是一段正文。
+</p>
+```
+
+图片：
+
+```html
+<img src="image.png" alt="图片描述">
+```
+
+链接：
+
+```html
+<a href="https://example.com">
+  点击这里
+</a>
+```
+
+代码：
+
+```html
+<pre>
+  <code>
+    print("Hello World")
+  </code>
+</pre>
+```
+
+所以如果单纯写一个技术博客，真正需要理解的 HTML 并没有想象中那么多。
+
+---
+
+## 3. CSS 又是什么？
+
+如果只有 HTML，我的网站大概会长成这样：
+
+```text
+ZYCR NETWORK
+
+PERSONAL ACCESS NODE
+
+PUBLICATIONS
+
+PROJECTS
+
+DEVLOG
+```
+
+能看。
+
+但是毫无性格。
+
+所以才需要 CSS。
+
+CSS 全称：
+
+**Cascading Style Sheets**
+
+它负责告诉浏览器：
+
+> HTML 应该长什么样。
+
+比如 HTML 里有：
+
+```html
+<h1>
+  PERSONAL ACCESS NODE
+</h1>
+```
+
+CSS 可以写：
+
+```css
+h1 {
+  color: #f0fff0;
+  font-size: 32px;
+}
+```
+
+意思就是：
+
+```text
+所有 h1：
+
+文字颜色 → #f0fff0
+字体大小 → 32px
+```
+
+HTML 负责：
+
+> “我是标题。”
+
+CSS 负责：
+
+> “标题应该这么长。”
+
+这两个职责是分开的。
+
+这也是非常重要的 Web 思维。
+
+---
+
+## 4. 为什么我的网站可以一键变成终端风？
+
+秘密基本都在 CSS 里面。
+
+例如我的网站有几组颜色变量：
+
+```css
+:root {
+  --bg: #020502;
+
+  --green: #75ff66;
+
+  --green-soft: #b8ffae;
+
+  --green-dark: #244f22;
+
+  --green-dim: #587a54;
+
+  --body: #c6d5c3;
+
+  --yellow: #d8c96d;
+}
+```
+
+这相当于先定义一套“设计语言”。
+
+例如：
+
+```text
+--bg
+```
+
+表示背景颜色。
+
+```text
+--green
+```
+
+表示主要荧光绿色。
+
+```text
+--body
+```
+
+表示正文颜色。
+
+以后就可以写：
+
+```css
+h2 {
+  color: var(--green);
+}
+```
+
+而不用每次都写：
+
+```css
+h2 {
+  color: #75ff66;
+}
+```
+
+这就是 CSS Variable。
+
+它最大的价值是：
+
+> 整个网站的视觉风格可以统一管理。
+
+哪天我突然想把绿色终端改成琥珀色终端，只需要改几个变量，而不用找遍整个网站。
+
+---
+
+## 5. 为什么标题和正文看起来不一样？
+
+这是我后来非常在意的一点。
+
+一个复古终端网站很容易犯一个错误：
+
+> 什么东西都是绿色的。
+
+标题绿色。
+
+正文绿色。
+
+链接绿色。
+
+代码绿色。
+
+公式绿色。
+
+最后整个屏幕像一桶荧光液体。
+
+复古是复古了，阅读体验也顺便回到了拨号上网年代。
+
+所以我把文章层级明确区分开。
+
+文章总标题：
+
+```css
+h1 {
+  color: var(--white);
+  font-size: 2rem;
+}
+```
+
+正文一级标题：
+
+```css
+.article-body h2 {
+  color: var(--green);
+  font-size: 1.45rem;
+}
+```
+
+二级标题：
+
+```css
+.article-body h3 {
+  color: var(--green-soft);
+}
+```
+
+三级标题：
+
+```css
+.article-body h4 {
+  color: var(--yellow);
+}
+```
+
+真正正文：
+
+```css
+.article-body {
+  color: var(--body);
+  line-height: 1.95;
+  text-shadow: none;
+}
+```
+
+于是整个视觉层级变成：
+
+```text
+文章标题
+████████████████████
+
+一级章节
+████████████
+
+正文正文正文正文正文正文
+正文正文正文正文正文正文
+
+二级章节
+████████
+
+正文正文正文正文正文正文
+
+三级章节
+██████
+```
+
+标题负责导航。
+
+正文负责阅读。
+
+这才是一个真正可以长期写教程的网站，而不仅仅是一张终端风截图。
+
+---
+
+## 6. CRT 扫描线是怎么做出来的？
+
+这可能是整个页面里看起来最“玄学”的部分。
+
+实际上只是 CSS。
+
+例如：
+
+```css
+body::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.8) 3px,
+      rgba(0, 0, 0, 0.8) 4px
+    );
+}
+```
+
+这里用了：
+
+```text
+body::before
+```
+
+它叫 **伪元素**。
+
+你可以理解成：
+
+> CSS 偷偷在整个网页上面盖了一层透明薄膜。
+
+然后：
+
+```css
+repeating-linear-gradient(...)
+```
+
+画出：
+
+```text
+透明
+黑线
+透明
+黑线
+透明
+黑线
+```
+
+不断重复。
+
+于是就形成了 CRT 显示器那种扫描线。
+
+网页本身并没有真的多出几十万个横线元素。
+
+浏览器只是画了一层背景。
+
+---
+
+## 7. CRT 屏幕边缘为什么有暗角？
+
+同样是 CSS。
+
+```css
+body::after {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(0, 0, 0, 0.50) 100%
+    );
+}
+```
+
+可以理解成：
+
+```text
+屏幕中心
+    ↓
+透明
+
+越来越靠近边缘
+    ↓
+越来越黑
+```
+
+于是整个页面就有了一点老式显示器的视觉效果。
+
+所以所谓“复古 CRT 风”，真正实现起来并不需要什么神秘框架。
+
+本质上就是：
+
+```text
+颜色
++
+阴影
++
+渐变
++
+扫描线
++
+等宽字体
+```
+
+---
+
+## 8. 那我为什么最后没有直接写 HTML？
+
+因为手写一个页面很简单。
+
+手写 100 个页面非常蠢。
+
+假设我有：
+
+```text
+DEV-001
+DEV-002
+DEV-003
+...
+DEV-100
+```
+
+如果每一篇都自己写：
+
+```text
+index.html
+```
+
+那么我还得自己维护：
+
+```text
+首页
+文章列表
+文章日期
+导航
+上一篇下一篇
+页面标题
+SEO
+```
+
+每发一篇文章都要修改多个文件。
+
+这已经不是写博客了。
+
+这是无偿给自己当网站管理员。
+
+所以我引入了 Hugo。
+
+---
+
+## 9. Hugo 到底是什么？
+
+Hugo 是一个：
+
+**Static Site Generator**
+
+也就是：
+
+**静态网站生成器。**
+
+它做的事情非常容易理解。
+
+我写：
+
+```text
+hello.md
+```
+
+Hugo 读取：
+
+```text
+Markdown
+```
+
+再读取：
+
+```text
+HTML 模板
+```
+
+最后自动生成：
+
+```text
+HTML
+```
+
+整个过程：
+
+```text
+Markdown 内容
+        │
+        │
+        ▼
+      Hugo
+        ▲
+        │
+        │
+HTML 模板 + CSS
+        │
+        ▼
+最终网页
+```
+
+所以以后我不需要写 HTML。
+
+我只写：
+
+```markdown
+## DataLoader 是什么？
+
+DataLoader 可以理解为数据搬运器。
+
+### Dataset
+
+Dataset 决定一个样本是什么。
+```
+
+Hugo 自动转换成 HTML。
+
+---
+
+## 10. Markdown 又是什么？
+
+Markdown 可以理解成：
+
+> 为人类设计的超简化 HTML。
+
+HTML：
+
+```html
+<h2>
+  DataLoader 是什么？
+</h2>
+
+<p>
+  DataLoader 可以理解为数据搬运器。
+</p>
+```
+
+Markdown：
+
+```markdown
+## DataLoader 是什么？
+
+DataLoader 可以理解为数据搬运器。
+```
+
+显然第二个更适合写文章。
+
+Markdown 标题：
+
+```markdown
+## 一级正文标题
+
+### 二级正文标题
+
+#### 三级正文标题
+```
+
+粗体：
+
+```markdown
+**这是重点**
+```
+
+行内代码：
+
+```markdown
+`batch_size`
+```
+
+列表：
+
+```markdown
+- Dataset
+- DataLoader
+- Sampler
+```
+
+代码：
+
+````markdown
+```python
+print("Hello World")
+```
+````
+
+图片：
+
+```markdown
+![图片说明](image.png)
+```
+
+所以我最终真正写文章时，基本不需要看到 HTML。
+
+---
+
+## 11. Hugo 的目录结构到底是什么意思？
+
+我的网站源码大概是：
+
+```text
+zycr/
+│
+├── content/
+│
+├── layouts/
+│
+├── static/
+│
+├── hugo.toml
+│
+└── wrangler.jsonc
+```
+
+这几个目录各自扮演完全不同的角色。
+
+---
+
+### 11.1 `content/`：我的文章
+
+这是我以后最常碰的地方。
+
+例如：
+
+```text
+content/
+│
+├── publications/
+│
+├── projects/
+│
+├── devlog/
+│
+└── qa/
+```
+
+其中：
+
+```text
+content/devlog/
+```
+
+放学习日志和教程。
+
+例如：
+
+```text
+content/devlog/
+├── hello.md
+├── pytorch-dataloader.md
+└── transformer-attention.md
+```
+
+我只负责往这里写文章。
+
+---
+
+### 11.2 `layouts/`：网页模具
+
+这里放的是 HTML 模板。
+
+例如：
+
+```text
+layouts/
+├── baseof.html
+├── home.html
+├── section.html
+└── page.html
+```
+
+可以把它们理解成工厂模具。
+
+```text
+baseof.html
+```
+
+负责网站公共框架。
+
+例如：
+
+```text
+导航
+<head>
+CSS
+Footer
+MathJax
+```
+
+```text
+home.html
+```
+
+负责首页。
+
+```text
+section.html
+```
+
+负责：
+
+```text
+/devlog/
+/projects/
+/qa/
+```
+
+这种文章列表页。
+
+```text
+page.html
+```
+
+负责具体文章。
+
+于是：
+
+```text
+100 篇文章
+```
+
+并不需要：
+
+```text
+100 个 HTML 模板。
+```
+
+所有文章都共用：
+
+```text
+page.html
+```
+
+这就是模板系统真正厉害的地方。
+
+---
+
+## 12. Hugo 模板里的奇怪双大括号是什么？
+
+例如：
+
+```html
+<h1>
+  {{ .Title }}
+</h1>
+```
+
+这不是 HTML。
+
+这是 Hugo Template Language。
+
+意思是：
+
+> 把当前 Markdown 文件的标题放到这里。
+
+例如 Markdown：
+
+```yaml
+---
+title: "我是如何搭建这个博客的"
+---
+```
+
+Hugo 读取：
+
+```text
+.Title
+```
+
+得到：
+
+```text
+我是如何搭建这个博客的
+```
+
+然后生成：
+
+```html
+<h1>
+  我是如何搭建这个博客的
+</h1>
+```
+
+同样：
+
+```html
+{{ .Content }}
+```
+
+代表：
+
+> 把 Markdown 正文转换成 HTML，然后塞到这里。
+
+所以：
+
+```text
+Markdown
+```
+
+是数据。
+
+```text
+HTML Template
+```
+
+是模具。
+
+```text
+Hugo
+```
+
+是加工机器。
+
+---
+
+## 13. `static/` 又是什么？
+
+这里放不需要 Hugo 加工的静态资源。
+
+比如：
+
+```text
+static/
+├── assets/
+│   └── css/
+│       └── terminal.css
+│
+└── images/
+```
+
+CSS：
+
+```text
+static/assets/css/terminal.css
+```
+
+最终会变成：
+
+```text
+/assets/css/terminal.css
+```
+
+图片：
+
+```text
+static/images/example.png
+```
+
+最终网站地址就是：
+
+```text
+/images/example.png
+```
+
+Hugo 基本就是原样复制这些资源。
+
+---
+
+## 14. Hugo 最后生成了什么？
+
+执行：
+
+```bash
+hugo --minify --gc
+```
+
+之后，Hugo 会生成：
+
+```text
+public/
+```
+
+例如：
+
+```text
+public/
+│
+├── index.html
+│
+├── devlog/
+│   ├── index.html
+│   └── hello/
+│       └── index.html
+│
+├── projects/
+│
+├── qa/
+│
+├── assets/
+│
+└── sitemap.xml
+```
+
+这里有一个非常重要的观念：
+
+> `public/` 不是源代码。
+
+它是：
+
+**编译结果。**
+
+类似：
+
+```text
+C++ 源代码
+↓
+编译器
+↓
+.exe
+```
+
+Hugo：
+
+```text
+Markdown + Template
+↓
+Hugo
+↓
+public/
+```
+
+所以我的 GitHub 里根本不需要维护 `public/`。
+
+每次部署重新生成就行。
+
+---
+
+## 15. GitHub 在整个系统里到底负责什么？
+
+GitHub 在这里不是网站服务器。
+
+它更像：
+
+> 我的代码仓库 + 历史记录数据库。
+
+网站源代码全部存在：
+
+```text
+GitHub Repository
+```
+
+比如：
+
+```text
+content/
+layouts/
+static/
+hugo.toml
+wrangler.jsonc
+```
+
+每次我修改以后：
+
+```text
+Commit changes
+```
+
+GitHub 就保存一次版本。
+
+比如：
+
+```text
+Commit 1
+搭建网站
+
+Commit 2
+修改 CSS
+
+Commit 3
+增加 DEV-001
+
+Commit 4
+修复标题
+```
+
+如果哪一天我把整个 CSS 改成灾难现场，我可以找到之前的 Commit。
+
+所以 Git 最重要的能力并不是“上传代码”。
+
+而是：
+
+> 保存整个项目随时间变化的历史。
+
+---
+
+## 16. Commit 到底是什么？
+
+可以把 Commit 理解成：
+
+**给整个项目拍一张快照。**
+
+例如：
+
+```text
+2026-08-25 04:00
+
+项目状态：
+A
+B
+C
+D
+```
+
+执行一次 Commit。
+
+然后我修改：
+
+```text
+C
+D
+```
+
+再 Commit：
+
+```text
+2026-08-25 04:30
+
+项目状态：
+A
+B
+C'
+D'
+```
+
+Git 知道：
+
+```text
+04:00 是什么样
+04:30 是什么样
+```
+
+所以 GitHub 也就能展示：
+
+```text
+谁改了什么
+什么时候改
+具体改了哪一行
+```
+
+这对长期维护博客其实非常舒服。
+
+---
+
+## 17. Cloudflare 又负责什么？
+
+如果 GitHub 是仓库，那么 Cloudflare 才是真正把网站交给互联网的人。
+
+我的部署流程是：
+
+```text
+GitHub
+     ↓
+Cloudflare Workers Builds
+     ↓
+Hugo Build
+     ↓
+Wrangler Deploy
+     ↓
+Cloudflare Workers
+```
+
+重点是：
+
+**Cloudflare 和 GitHub 是连接在一起的。**
+
+每次 GitHub 出现新的 Commit：
+
+```text
+Commit
+```
+
+Cloudflare 会知道：
+
+> 仓库更新了。
+
+然后自动启动一次 Build。
+
+---
+
+## 18. Cloudflare 第一步做什么？
+
+先把 GitHub 仓库拉下来。
+
+可以理解成：
+
+```text
+Cloudflare：
+“让我看看最新代码。”
+```
+
+然后执行：
+
+```bash
+hugo --minify --gc
+```
+
+于是：
+
+```text
+content/
+layouts/
+static/
+```
+
+经过 Hugo 后得到：
+
+```text
+public/
+```
+
+---
+
+## 19. 然后 Wrangler 又是什么？
+
+Cloudflare 构建完成以后执行：
+
+```bash
+npx wrangler deploy
+```
+
+Wrangler 是 Cloudflare 官方的部署工具。
+
+它读取：
+
+```text
+wrangler.jsonc
+```
+
+我的配置大概是：
+
+```json
+{
+  "name": "zycr",
+
+  "assets": {
+    "directory": "./public/"
+  }
+}
+```
+
+翻译成人话：
+
+```text
+Worker 名字：
+zycr
+
+需要部署的网站：
+./public/
+```
+
+于是 Wrangler 把：
+
+```text
+public/
+```
+
+上传到 Cloudflare。
+
+---
+
+## 20. Cloudflare Workers 为什么可以托管静态博客？
+
+传统网站通常是：
+
+```text
+用户
+↓
+服务器
+↓
+Nginx
+↓
+HTML
+```
+
+比如需要维护：
+
+```text
+Linux
+80 端口
+443 端口
+Nginx
+HTTPS
+证书
+防火墙
+服务器
+```
+
+而我的网站是静态网站。
+
+所有页面早就已经由 Hugo 生成完成。
+
+用户访问：
+
+```text
+/devlog/hello/
+```
+
+Cloudflare 只需要把对应的：
+
+```text
+index.html
+```
+
+发给用户。
+
+根本不需要数据库。
+
+也不需要 Python。
+
+也不需要 PHP。
+
+于是 Cloudflare Workers Static Assets 非常适合干这件事。
+
+---
+
+## 21. 那我的访问请求到底经历了什么？
+
+当你在浏览器输入：
+
+```text
+https://zycr.xxxxx.workers.dev/devlog/hello/
+```
+
+整个过程可以想象成：
+
+```text
+你
+│
+│ HTTP Request
+▼
+Cloudflare 全球网络
+│
+│ 查找静态资源
+▼
+/devlog/hello/index.html
+│
+│ 返回
+▼
+你的浏览器
+```
+
+然后浏览器开始解析 HTML。
+
+它发现：
+
+```html
+<link
+  rel="stylesheet"
+  href="/assets/css/terminal.css"
+>
+```
+
+于是继续请求：
+
+```text
+/assets/css/terminal.css
+```
+
+Cloudflare 返回 CSS。
+
+然后浏览器：
+
+```text
+读取 HTML
+↓
+建立页面结构
+↓
+读取 CSS
+↓
+给页面上色、排版
+↓
+显示最终界面
+```
+
+这就是你现在看到这个绿色终端网站的全过程。
+
+---
+
+## 22. GitHub 和 Cloudflare 到底是怎么配合的？
+
+这是整套系统最核心的一张图：
+
+```text
+我写文章
+│
+▼
+Markdown
+│
+▼
+GitHub Commit
+│
+│
+│ 仓库发生变化
+│
+▼
+Cloudflare Detect
+│
+▼
+Clone Repository
+│
+▼
+hugo --minify --gc
+│
+▼
+生成 public/
+│
+▼
+npx wrangler deploy
+│
+▼
+Cloudflare Workers
+│
+▼
+公网更新
+```
+
+所以我平时真正需要做的只有：
+
+```text
+写 Markdown
++
+Commit
+```
+
+后面的事情全部自动。
+
+---
+
+## 23. 为什么我最后选择这种结构？
+
+因为我不希望博客写到 100 篇以后变成这种状态：
+
+```text
+article1.html
+article2.html
+article2-final.html
+article2-final-v2.html
+blog-new.html
+blog-new-final.html
+```
+
+现在每篇文章就是：
+
+```text
+content/devlog/example.md
+```
+
+文章和网站样式完全分开。
+
+我要修改文章：
+
+```text
+改 Markdown
+```
+
+我要修改整个网站外观：
+
+```text
+改 terminal.css
+```
+
+我要改变文章页面布局：
+
+```text
+改 page.html
+```
+
+一处修改，全站生效。
+
+这才是一个长期维护的网站应该有的结构。
+
+---
+
+## 24. HTML、CSS、Markdown、Hugo 的关系总结
+
+现在可以画出一张完整地图：
+
+```text
+Markdown
+│
+│ 负责
+│
+├── 标题
+├── 正文
+├── 图片
+├── 公式
+└── 代码
+│
+▼
+
+Hugo
+│
+│ 将 Markdown 填入
+│
+▼
+
+HTML Template
+│
+│ 决定
+│
+├── 页面结构
+├── 导航
+├── Footer
+└── 内容放在哪里
+│
+▼
+
+HTML
+│
+│ 再加载
+│
+▼
+
+CSS
+│
+│ 决定
+│
+├── 颜色
+├── 字号
+├── 间距
+├── 边框
+├── CRT
+└── Terminal 风格
+│
+▼
+
+最终网页
+```
+
+所以：
+
+```text
+Markdown = 内容
+
+HTML = 结构
+
+CSS = 外观
+
+Hugo = 自动生成器
+```
+
+这是理解整个博客最关键的一句话。
+
+---
+
+## 25. GitHub 和 Cloudflare 的关系总结
+
+另一半：
+
+```text
+GitHub
+│
+│ 保存
+│
+├── Markdown
+├── HTML Templates
+├── CSS
+└── 配置
+│
+▼
+
+Commit
+│
+▼
+
+Cloudflare
+│
+│ 自动构建
+▼
+
+Hugo
+│
+▼
+
+public/
+│
+▼
+
+Wrangler
+│
+▼
+
+Cloudflare Workers
+│
+▼
+
+Internet
+```
+
+所以：
+
+```text
+GitHub = 保存源码
+
+Cloudflare Build = 自动构建
+
+Hugo = 生成网站
+
+Wrangler = 部署工具
+
+Cloudflare Workers = 真正提供网站
+```
+
+---
+
+## 26. 以后我是怎么发文章的？
+
+比如我要写：
+
+> 从零理解 PyTorch DataLoader
+
+我只需要在：
+
+```text
+content/devlog/
+```
+
+创建：
+
+```text
+pytorch-dataloader.md
+```
+
+然后：
+
+````markdown
+---
+title: "从零理解 PyTorch DataLoader"
+---
+
+这里写文章简介。
+
+## 1. DataLoader 是什么？
+
+这里写正文。
+
+### 1.1 Dataset
+
+继续写。
+
+#### 1.1.1 __getitem__
+
+继续写。
 
 ## 2. 代码
 
 ```python
-import torch
+from torch.utils.data import DataLoader
+````
 
-x = torch.randn(32, 512)
+````
 
-print(x.shape)
+Commit。
+
+结束。
+
+Cloudflare 会自己完成剩下所有工作。
+
+---
+
+## 27. 为什么静态博客其实很适合个人知识库？
+
+因为大部分个人博客根本不需要：
+
+```text
+数据库
+后端 API
+服务器
+登录系统
+动态渲染
+````
+
+文章本质上就是：
+
+```text
+文字
+图片
+代码
+公式
+链接
 ```
 
-## 3. 数学公式
+这些完全可以提前生成 HTML。
 
-行内公式：
+静态站因此拥有几个很明显的优势：
 
-\(
-x \in \mathbb{R}^{d}
-\)
+* 部署简单
+* 访问速度快
+* 攻击面很小
+* 不需要维护数据库
+* 不需要管理服务器
+* 文章天然适合 Git
+* 迁移非常容易
 
-独立公式：
+哪天我不想用 Cloudflare：
 
-$$
-\mathcal{L}
-=
-\frac{1}{N}
-\sum_{i=1}^{N}
-(y_i-\hat y_i)^2
-$$
+```text
+GitHub 仓库
+↓
+换一个静态托管平台
+```
 
-## 4. 表格
+文章完全不用重写。
 
-| 参数 | 数值 |
-|---|---:|
-| batch size | 32 |
-| epochs | 100 |
+---
 
-## 5. 引用
+## 28. 这套系统真正重要的不是“复古”
 
-> 如果这里正常显示，说明文章模板工作正常。
+虽然这个博客最大的视觉特点可能是：
 
-## 6. 总结
+```text
+黑底
+绿字
+CRT
+BBS
+Terminal
+```
 
-以后我只需要创建 Markdown 文件。
+但真正让我满意的其实不是这些。
+
+而是现在整个系统已经分成了很清晰的几层：
+
+```text
+内容层
+Markdown
+
+结构层
+Hugo Template
+
+视觉层
+CSS
+
+版本层
+GitHub
+
+构建层
+Hugo
+
+部署层
+Cloudflare Workers
+```
+
+每一层只负责一件事。
+
+这意味着以后不管网站长到：
+
+```text
+10 篇文章
+100 篇文章
+500 篇文章
+```
+
+我写文章的方式都不会发生变化。
+
+---
+
+## 29. 最后的完整架构
+
+最终，这个小小的绿色终端背后其实运行着这样一套流水线：
+
+```text
+                    ZYCR
+
+              PERSONAL NODE
+
+
+                 Writer
+                   │
+                   │ Markdown
+                   ▼
+                GitHub
+                   │
+                   │ Commit
+                   ▼
+        Cloudflare Workers Builds
+                   │
+                   │
+                   ▼
+                  Hugo
+                   │
+                   │ Generate
+                   ▼
+                public/
+                   │
+                   │
+                   ▼
+                Wrangler
+                   │
+                   │ Deploy
+                   ▼
+        Cloudflare Global Network
+                   │
+                   │ HTTPS
+                   ▼
+                Visitor
+```
+
+于是我以后真正需要做的只剩：
+
+```text
+写东西。
+```
+
+剩下的事情，交给机器。
+
+这大概也是我最终愿意继续维护这套博客的原因。
+
+它不是一个需要不断伺候的网站。
+
+它更像一个长期在线的个人节点：
+
+```text
+ZYCR NETWORK // PUBLIC TERMINAL
+
+NODE STATUS .... ONLINE
+ARCHIVE ........ AVAILABLE
+CONNECTION ..... SECURE
+
+guest@zycr:~$ █
+```
