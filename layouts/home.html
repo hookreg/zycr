@@ -1,6 +1,5 @@
 {{ define "main" }}
 
-
 <pre class="logo">
 ███████╗██╗   ██╗ ██████╗██████╗
 ╚══███╔╝╚██╗ ██╔╝██╔════╝██╔══██╗
@@ -47,7 +46,6 @@
     [ SYSTEM DIRECTORY ]
   </div>
 
-
   <div class="directory">
 
     <a href="/publications/">
@@ -66,7 +64,6 @@
 
     </div>
 
-
     <a href="/projects/">
       &gt; [02] PROJECTS
     </a>
@@ -76,7 +73,7 @@
     </a>
 
     <a href="/qa/">
-      &gt; [04] Q&A
+      &gt; [04] Q&amp;A
     </a>
 
     <a href="/about/">
@@ -94,24 +91,33 @@
     [ LATEST TRANSMISSIONS ]
   </div>
 
+  {{ $pages := site.RegularPages.ByDate.Reverse }}
 
-  {{ range first 8 site.RegularPages.ByDate.Reverse }}
+  {{ if gt (len $pages) 0 }}
 
-    <div class="transmission">
+    {{ range first 8 $pages }}
 
-      <span class="date">
-        {{ .Date.Format "2006-01-02" }}
-      </span>
+      <div class="transmission">
 
-      <span class="tag">
-        [{{ upper (.Params.entry_type | default .Section) }}]
-      </span>
+        <span class="date">
+          {{ .Date.Format "2006-01-02" }}
+        </span>
 
-      <a href="{{ .RelPermalink }}">
-        {{ .Title }}
-      </a>
+        <span class="tag">
+          {{ with .Params.entry_type }}
+            [{{ upper . }}]
+          {{ else }}
+            [{{ upper .Section }}]
+          {{ end }}
+        </span>
 
-    </div>
+        <a href="{{ .RelPermalink }}">
+          {{ .Title }}
+        </a>
+
+      </div>
+
+    {{ end }}
 
   {{ else }}
 
@@ -122,9 +128,5 @@
   {{ end }}
 
 </section>
-
-
-{{ end }}
-
 
 {{ end }}
