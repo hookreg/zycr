@@ -47,6 +47,7 @@
     [ SYSTEM DIRECTORY ]
   </div>
 
+
   <div class="directory">
 
     <a href="/publications/">
@@ -94,9 +95,7 @@
   </div>
 
 
-  {{ range first 8 .Site.RegularPages.ByDate.Reverse }}
-
-    {{ $kind := .Params.entry_type | default .Section }}
+  {{ range first 8 site.RegularPages.ByDate.Reverse }}
 
     <div class="transmission">
 
@@ -105,7 +104,7 @@
       </span>
 
       <span class="tag">
-        [{{ upper $kind }}]
+        [{{ upper (.Params.entry_type | default .Section) }}]
       </span>
 
       <a href="{{ .RelPermalink }}">
@@ -123,6 +122,9 @@
   {{ end }}
 
 </section>
+
+
+{{ end }}
 
 
 {{ end }}
