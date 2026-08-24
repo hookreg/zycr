@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="ZYCR Personal Access Node - 个人研究、技术与项目记录。">
+
+  <meta name="robots" content="index, follow">
+
+  <title>ZYCR // PERSONAL ACCESS NODE</title>
+
+  <style>
+    :root {
+      --bg: #020502;
+      --panel: #050b05;
+      --green: #75ff66;
+      --green-soft: #b8ffae;
+      --green-dark: #244f22;
+      --green-dim: #587a54;
+      --border: #315e2d;
+      --white: #eaffE7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      color: var(--green-soft);
+
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          #0b180b 0%,
+          #040804 35%,
+          #010201 100%
+        );
+
+      font-family:
+        "Courier New",
+        "Lucida Console",
+        "Consolas",
+        monospace;
+
+      line-height: 1.65;
+
+      text-shadow:
+        0 0 5px rgba(117, 255, 102, 0.22);
+    }
+
+
+    /* =========================
+       CRT SCANLINES
+       ========================= */
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: 100;
+
+      opacity: 0.10;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 2px,
+          rgba(0, 0, 0, 0.8) 3px,
+          rgba(0, 0, 0, 0.8) 4px
+        );
+    }
+
+
+    /* CRT 暗角 */
+
+    body::after {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: 99;
+
+      background:
+        radial-gradient(
+          ellipse at center,
+          transparent 55%,
+          rgba(0, 0, 0, 0.55) 100%
+        );
+    }
+
+
+    /* =========================
+       MAIN TERMINAL
+       ========================= */
+
+    .terminal {
+      width: min(940px, 92%);
+
+      margin: 48px auto;
+
+      padding: 30px 34px;
+
+      position: relative;
+      z-index: 1;
+
+      background:
+        rgba(3, 9, 3, 0.94);
+
+      border:
+        1px solid var(--border);
+
+      box-shadow:
+        0 0 0 1px rgba(117, 255, 102, 0.04),
+        0 0 35px rgba(117, 255, 102, 0.07),
+        inset 0 0 40px rgba(117, 255, 102, 0.018);
+    }
+
+
+    /* =========================
+       TOP BAR
+       ========================= */
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 20px;
+
+      padding-bottom: 13px;
+
+      border-bottom:
+        1px dashed var(--border);
+
+      color: var(--green-dim);
+
+      font-size: 13px;
+    }
+
+    .status {
+      color: var(--green);
+    }
+
+
+    /* =========================
+       ASCII LOGO
+       ========================= */
+
+    .logo {
+      margin: 32px 0 18px;
+
+      overflow-x: auto;
+
+      color: var(--green);
+
+      font-size: 13px;
+
+      line-height: 1.05;
+
+      text-shadow:
+        0 0 8px rgba(117, 255, 102, 0.45);
+    }
+
+
+    /* =========================
+       SYSTEM INFO
+       ========================= */
+
+    .system-title {
+      margin: 8px 0;
+
+      color: var(--white);
+
+      font-size: 18px;
+
+      letter-spacing: 2px;
+    }
+
+    .system-info {
+      margin: 20px 0 30px;
+    }
+
+    .system-info p {
+      margin: 3px 0;
+    }
+
+    .label {
+      display: inline-block;
+      width: 145px;
+
+      color: var(--green-dim);
+    }
+
+    .online {
+      color: var(--green);
+    }
+
+
+    /* =========================
+       SECTION
+       ========================= */
+
+    section {
+      margin-top: 35px;
+    }
+
+    .section-title {
+      margin-bottom: 17px;
+
+      padding-bottom: 8px;
+
+      border-bottom:
+        1px dashed var(--border);
+
+      color: var(--green);
+
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================
+       NAVIGATION
+       ========================= */
+
+    nav {
+      display: flex;
+      flex-direction: column;
+
+      gap: 7px;
+    }
+
+    a {
+      color: var(--green);
+
+      text-decoration: none;
+
+      transition:
+        background 0.12s,
+        color 0.12s,
+        text-shadow 0.12s;
+    }
+
+    a:hover,
+    a:focus {
+      color: #ffffff;
+
+      background: var(--green-dark);
+
+      text-shadow:
+        0 0 8px var(--green);
+
+      outline: none;
+    }
+
+    .menu-item::before {
+      content: "> ";
+
+      color: var(--green-dim);
+    }
+
+
+    /* =========================
+       TRANSMISSIONS
+       ========================= */
+
+    .transmission {
+      display: grid;
+
+      grid-template-columns:
+        120px 1fr;
+
+      gap: 18px;
+
+      padding: 9px 0;
+
+      border-bottom:
+        1px dotted rgba(117, 255, 102, 0.14);
+    }
+
+    .date {
+      color: var(--green-dim);
+    }
+
+    .tag {
+      color: #d8c96d;
+
+      font-size: 12px;
+    }
+
+
+    /* =========================
+       ABOUT
+       ========================= */
+
+    .about {
+      color: #a5cda0;
+
+      max-width: 720px;
+    }
+
+
+    /* =========================
+       TERMINAL COMMAND
+       ========================= */
+
+    .command {
+      margin-top: 30px;
+
+      padding: 17px;
+
+      background: #020402;
+
+      border:
+        1px solid rgba(117, 255, 102, 0.16);
+    }
+
+    .prompt {
+      color: var(--green);
+    }
+
+    .command-output {
+      margin-top: 8px;
+
+      color: var(--green-dim);
+    }
+
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    footer {
+      margin-top: 42px;
+
+      padding-top: 17px;
+
+      border-top:
+        1px dashed var(--border);
+
+      color: var(--green-dim);
+
+      font-size: 13px;
+    }
+
+
+    /* =========================
+       CURSOR
+       ========================= */
+
+    .cursor {
+      color: var(--green);
+
+      animation:
+        blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      48% {
+        opacity: 1;
+      }
+
+      49%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 650px) {
+
+      .terminal {
+        width: 96%;
+
+        margin: 14px auto;
+
+        padding: 20px 17px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 3px;
+      }
+
+      .logo {
+        font-size: 8px;
+      }
+
+      .label {
+        width: 120px;
+      }
+
+      .transmission {
+        grid-template-columns: 1fr;
+
+        gap: 2px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+<main class="terminal">
+
+
+  <!-- =========================
+       STATUS BAR
+       ========================= -->
+
+  <div class="topbar">
+
+    <span>
+      ZYCR NETWORK // PUBLIC TERMINAL
+    </span>
+
+    <span>
+      STATUS:
+      <strong class="status">
+        ONLINE
+      </strong>
+    </span>
+
+  </div>
+
+
+
+  <!-- =========================
+       ASCII LOGO
+       ========================= -->
+
+  <pre class="logo">
+███████╗██╗   ██╗ ██████╗██████╗
+╚══███╔╝╚██╗ ██╔╝██╔════╝██╔══██╗
+  ███╔╝  ╚████╔╝ ██║     ██████╔╝
+ ███╔╝    ╚██╔╝  ██║     ██╔══██╗
+███████╗   ██║   ╚██████╗██║  ██║
+╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝
+  </pre>
+
+
+  <div class="system-title">
+    PERSONAL ACCESS NODE
+  </div>
+
+
+  <!-- =========================
+       SYSTEM INFORMATION
+       ========================= -->
+
+  <div class="system-info">
+
+    <p>
+      <span class="label">
+        NODE STATUS
+      </span>
+
+      <span class="online">
+        ONLINE
+      </span>
+    </p>
+
+    <p>
+      <span class="label">
+        ACCESS
+      </span>
+
+      PUBLIC
+    </p>
+
+    <p>
+      <span class="label">
+        PROTOCOL
+      </span>
+
+      HTTPS
+    </p>
+
+    <p>
+      <span class="label">
+        NODE TYPE
+      </span>
+
+      PERSONAL ARCHIVE
+    </p>
+
+    <p>
+      <span class="label">
+        SYSTEM
+      </span>
+
+      ZYCR-NET
+    </p>
+
+  </div>
+
+
+
+  <!-- =========================
+       DIRECTORY
+       ========================= -->
+
+  <section id="directory">
+
+    <div class="section-title">
+      [ SYSTEM DIRECTORY ]
+    </div>
+
+    <nav>
+
+      <a class="menu-item"
+         href="#home">
+
+        [01] HOME
+      </a>
+
+      <a class="menu-item"
+         href="#transmissions">
+
+        [02] TRANSMISSIONS
+      </a>
+
+      <a class="menu-item"
+         href="#research">
+
+        [03] RESEARCH
+      </a>
+
+      <a class="menu-item"
+         href="#projects">
+
+        [04] PROJECTS
+      </a>
+
+      <a class="menu-item"
+         href="#about">
+
+        [05] WHOAMI
+      </a>
+
+    </nav>
+
+  </section>
+
+
+
+  <!-- =========================
+       RECENT POSTS
+       ========================= -->
+
+  <section id="transmissions">
+
+    <div class="section-title">
+      [ RECENT TRANSMISSIONS ]
+    </div>
+
+
+    <div class="transmission">
+
+      <span class="date">
+        2026-08-25
+      </span>
+
+      <span>
+        <span class="tag">
+          [SYSTEM]
+        </span>
+
+        Initializing personal access node...
+      </span>
+
+    </div>
+
+
+    <div class="transmission">
+
+      <span class="date">
+        ---- -- --
+      </span>
+
+      <span>
+        <span class="tag">
+          [WAIT]
+        </span>
+
+        No additional transmissions found.
+      </span>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       RESEARCH
+       ========================= -->
+
+  <section id="research">
+
+    <div class="section-title">
+      [ RESEARCH ARCHIVE ]
+    </div>
+
+    <p>
+      &gt; Deep Learning
+    </p>
+
+    <p>
+      &gt; Multimodal Learning
+    </p>
+
+    <p>
+      &gt; Representation Learning
+    </p>
+
+    <p>
+      &gt; Research Notes
+    </p>
+
+  </section>
+
+
+
+  <!-- =========================
+       PROJECTS
+       ========================= -->
+
+  <section id="projects">
+
+    <div class="section-title">
+      [ PROJECT DATABASE ]
+    </div>
+
+    <p>
+      NO PUBLIC PROJECT RECORDS FOUND.
+    </p>
+
+  </section>
+
+
+
+  <!-- =========================
+       ABOUT
+       ========================= -->
+
+  <section id="about">
+
+    <div class="section-title">
+      [ WHOAMI ]
+    </div>
+
+    <div class="about">
+
+      <p>
+        Welcome to my personal access node.
+      </p>
+
+      <p>
+        这里用于记录我的研究、技术探索、
+        项目开发以及一些值得长期保存的内容。
+      </p>
+
+      <p>
+        The archive is currently under construction.
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       FAKE TERMINAL
+       ========================= -->
+
+  <div class="command">
+
+    <div>
+      <span class="prompt">
+        guest@zycr:~$
+      </span>
+
+      whoami
+    </div>
+
+    <div class="command-output">
+      anonymous visitor
+    </div>
+
+    <div style="margin-top: 10px;">
+
+      <span class="prompt">
+        guest@zycr:~$
+      </span>
+
+      <span class="cursor">
+        █
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+
+  <footer>
+
+    <div>
+      ZYCR-NET // PUBLIC ACCESS NODE
+    </div>
+
+    <div>
+      SYSTEM OPERATIONAL
+      ·
+      CONNECTION SECURE
+    </div>
+
+  </footer>
+
+
+</main>
+
+</body>
+</html>
