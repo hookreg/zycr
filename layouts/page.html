@@ -1,8 +1,44 @@
 {{ define "main" }}
 
 
-<article>
+<article class="article-page">
 
+
+  <!-- =====================================
+       LOCAL NAVIGATION
+       ===================================== -->
+
+  <nav class="local-nav">
+
+    {{ with .Parent }}
+
+      {{ if .IsHome }}
+
+        <a href="/">
+          [ ← RETURN HOME ]
+        </a>
+
+      {{ else }}
+
+        <a href="{{ .RelPermalink }}">
+          [ ← RETURN {{ upper .Title }} ]
+        </a>
+
+        <a href="/">
+          [ HOME ]
+        </a>
+
+      {{ end }}
+
+    {{ end }}
+
+  </nav>
+
+
+
+  <!-- =====================================
+       ARTICLE HEADER
+       ===================================== -->
 
   <header class="article-header">
 
@@ -10,11 +46,17 @@
     <div class="section-title">
 
       [
+
       {{ with .Params.id }}
+
         {{ . }}
+
       {{ else }}
+
         RECORD
+
       {{ end }}
+
       ]
 
     </div>
@@ -25,40 +67,44 @@
     </h1>
 
 
-    <div class="record-meta">
+    {{ if or (not .Date.IsZero) .Params.entry_type .Params.tags .Params.venue }}
 
-      {{ if not .Date.IsZero }}
+      <div class="record-meta">
 
-        DATE:
-        {{ .Date.Format "2006-01-02" }}
+        {{ if not .Date.IsZero }}
 
-      {{ end }}
+          DATE:
+          {{ .Lastmod.Format "2006-01-02" }}
 
-
-      {{ with .Params.entry_type }}
-
-        · TYPE:
-        {{ upper . }}
-
-      {{ end }}
+        {{ end }}
 
 
-      {{ with .Params.tags }}
+        {{ with .Params.entry_type }}
 
-        · TAGS:
-        {{ delimit . " / " }}
+          · TYPE:
+          {{ upper . }}
 
-      {{ end }}
+        {{ end }}
 
 
-      {{ with .Params.venue }}
+        {{ with .Params.tags }}
 
-        · VENUE:
-        {{ . }}
+          · TAGS:
+          {{ delimit . " / " }}
 
-      {{ end }}
+        {{ end }}
 
-    </div>
+
+        {{ with .Params.venue }}
+
+          · VENUE:
+          {{ . }}
+
+        {{ end }}
+
+      </div>
+
+    {{ end }}
 
 
     {{ with .Description }}
@@ -73,6 +119,11 @@
   </header>
 
 
+
+  <!-- =====================================
+       MARKDOWN CONTENT
+       ===================================== -->
+
   <div class="article-body">
 
     {{ .Content }}
@@ -80,44 +131,93 @@
   </div>
 
 
+
+  <!-- =====================================
+       OPTIONAL RESOURCES
+       ===================================== -->
+
   {{ if or .Params.paper_url .Params.code_url .Params.repo_url }}
 
-  <section class="resource-box">
+    <section class="resource-box">
 
-    <div class="section-title">
-      [ RESOURCES ]
-    </div>
-
-
-    {{ with .Params.paper_url }}
-
-      <a href="{{ . }}" target="_blank">
-        [ PAPER ]
-      </a>
-
-    {{ end }}
+      <div class="section-title">
+        [ RESOURCES ]
+      </div>
 
 
-    {{ with .Params.code_url }}
+      {{ with .Params.paper_url }}
 
-      <a href="{{ . }}" target="_blank">
-        [ CODE ]
-      </a>
+        <a
+          href="{{ . }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [ PAPER ]
+        </a>
 
-    {{ end }}
+      {{ end }}
 
 
-    {{ with .Params.repo_url }}
+      {{ with .Params.code_url }}
 
-      <a href="{{ . }}" target="_blank">
-        [ REPOSITORY ]
-      </a>
+        <a
+          href="{{ . }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [ CODE ]
+        </a>
 
-    {{ end }}
+      {{ end }}
 
-  </section>
+
+      {{ with .Params.repo_url }}
+
+        <a
+          href="{{ . }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          [ REPOSITORY ]
+        </a>
+
+      {{ end }}
+
+    </section>
 
   {{ end }}
+
+
+
+  <!-- =====================================
+       BOTTOM NAVIGATION
+       ===================================== -->
+
+  <nav class="local-nav local-nav-bottom">
+
+    {{ with .Parent }}
+
+      {{ if .IsHome }}
+
+        <a href="/">
+          [ ← RETURN HOME ]
+        </a>
+
+      {{ else }}
+
+        <a href="{{ .RelPermalink }}">
+          [ ← RETURN {{ upper .Title }} ]
+        </a>
+
+        <a href="/">
+          [ HOME ]
+        </a>
+
+      {{ end }}
+
+    {{ end }}
+
+  </nav>
 
 
 </article>
