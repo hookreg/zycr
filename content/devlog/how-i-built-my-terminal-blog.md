@@ -1,5 +1,19 @@
 ---
 title: "我是如何搭建这个复古终端风个人博客的"
+
+chapter: "01"
+chapter_title: "Web 与个人博客"
+
+weight: 1
+
+description: "从 HTML、CSS、Markdown 到 Hugo、GitHub 和 Cloudflare Workers，完整理解这个复古终端博客的构建过程。"
+
+tags:
+  - HTML
+  - CSS
+  - Hugo
+  - GitHub
+  - Cloudflare
 ---
 
 如果你现在正在阅读这篇文章，那么说明这套系统至少还活着。
