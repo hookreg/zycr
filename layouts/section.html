@@ -1,0 +1,136 @@
+{{ define "main" }}
+
+
+<section>
+
+  <div class="section-title">
+    [ {{ upper .Title }} ]
+  </div>
+
+  {{ with .Content }}
+
+    <div class="article-body">
+      {{ . }}
+    </div>
+
+  {{ end }}
+
+</section>
+
+
+
+{{ with .Sections }}
+
+<section>
+
+  <div class="section-title">
+    [ SUB-DATABASES ]
+  </div>
+
+
+  {{ range .ByTitle }}
+
+    <div class="record">
+
+      <div class="record-id">
+        DIRECTORY
+      </div>
+
+      <h2>
+
+        <a href="{{ .RelPermalink }}">
+          {{ .Title }}
+        </a>
+
+      </h2>
+
+      {{ with .Description }}
+
+        <p class="record-description">
+          {{ . }}
+        </p>
+
+      {{ end }}
+
+    </div>
+
+  {{ end }}
+
+</section>
+
+{{ end }}
+
+
+
+<section>
+
+  <div class="section-title">
+    [ RECORDS ]
+  </div>
+
+
+  {{ range .RegularPages.ByDate.Reverse }}
+
+    <div class="record">
+
+      <div class="record-id">
+
+        {{ with .Params.id }}
+          {{ . }}
+        {{ else }}
+          RECORD
+        {{ end }}
+
+      </div>
+
+
+      <h2>
+
+        <a href="{{ .RelPermalink }}">
+          {{ .Title }}
+        </a>
+
+      </h2>
+
+
+      <div class="record-meta">
+
+        {{ .Date.Format "2006-01-02" }}
+
+        {{ with .Params.entry_type }}
+
+          · {{ upper . }}
+
+        {{ end }}
+
+        {{ with .Params.tags }}
+
+          · {{ delimit . " / " }}
+
+        {{ end }}
+
+      </div>
+
+
+      {{ with .Description }}
+
+        <p class="record-description">
+          {{ . }}
+        </p>
+
+      {{ end }}
+
+    </div>
+
+  {{ else }}
+
+    <p class="muted">
+      NO RECORDS FOUND.
+    </p>
+
+  {{ end }}
+
+</section>
+
+
+{{ end }}
