@@ -20,7 +20,7 @@
 
   <meta
     name="description"
-    content="{{ with .Description }}{{ . }}{{ else }}ZYCR personal research, engineering and knowledge archive.{{ end }}"
+    content="{{ if .Description }}{{ .Description }}{{ else }}{{ site.Params.description }}{{ end }}"
   >
 
   <meta
@@ -34,13 +34,10 @@
   >
 
 
-  <!-- 数学公式 -->
-
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [
-          ['$', '$'],
           ['\\(', '\\)']
         ],
         displayMath: [
@@ -52,8 +49,9 @@
   </script>
 
   <script
+    id="MathJax-script"
     async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
   </script>
 
 </head>
@@ -63,32 +61,44 @@
 
 <main class="terminal">
 
-  <div class="topbar">
+
+  <header class="topbar">
 
     <span>
       ZYCR NETWORK // PUBLIC TERMINAL
     </span>
 
-    <span class="status">
-      ONLINE
+    <span>
+      STATUS:
+      <strong class="status">ONLINE</strong>
     </span>
 
-  </div>
+  </header>
 
 
   <nav class="global-nav">
 
     <a href="/">[00] HOME</a>
 
-    <a href="/publications/">[01] PUBLICATIONS</a>
+    <a href="/publications/">
+      [01] PUBLICATIONS
+    </a>
 
-    <a href="/projects/">[02] PROJECTS</a>
+    <a href="/projects/">
+      [02] PROJECTS
+    </a>
 
-    <a href="/devlog/">[03] DEVLOG</a>
+    <a href="/devlog/">
+      [03] DEVLOG
+    </a>
 
-    <a href="/qa/">[04] Q&A</a>
+    <a href="/qa/">
+      [04] Q&A
+    </a>
 
-    <a href="/about/">[05] WHOAMI</a>
+    <a href="/about/">
+      [05] WHOAMI
+    </a>
 
   </nav>
 
@@ -108,6 +118,7 @@
     </span>
 
   </footer>
+
 
 </main>
 
