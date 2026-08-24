@@ -6,6 +6,7 @@
 
   <header class="article-header">
 
+
     <div class="section-title">
 
       [
@@ -26,8 +27,13 @@
 
     <div class="record-meta">
 
-      DATE:
-      {{ .Date.Format "2006-01-02" }}
+      {{ if not .Date.IsZero }}
+
+        DATE:
+        {{ .Date.Format "2006-01-02" }}
+
+      {{ end }}
+
 
       {{ with .Params.entry_type }}
 
@@ -36,10 +42,19 @@
 
       {{ end }}
 
+
       {{ with .Params.tags }}
 
         · TAGS:
         {{ delimit . " / " }}
+
+      {{ end }}
+
+
+      {{ with .Params.venue }}
+
+        · VENUE:
+        {{ . }}
 
       {{ end }}
 
@@ -54,8 +69,8 @@
 
     {{ end }}
 
-  </header>
 
+  </header>
 
 
   <div class="article-body">
@@ -65,21 +80,47 @@
   </div>
 
 
-</article>
+  {{ if or .Params.paper_url .Params.code_url .Params.repo_url }}
+
+  <section class="resource-box">
+
+    <div class="section-title">
+      [ RESOURCES ]
+    </div>
 
 
+    {{ with .Params.paper_url }}
 
-<div class="article-return">
+      <a href="{{ . }}" target="_blank">
+        [ PAPER ]
+      </a>
 
-  {{ with .Parent }}
+    {{ end }}
 
-    <a href="{{ .RelPermalink }}">
-      &lt; RETURN {{ upper .Title }}
-    </a>
+
+    {{ with .Params.code_url }}
+
+      <a href="{{ . }}" target="_blank">
+        [ CODE ]
+      </a>
+
+    {{ end }}
+
+
+    {{ with .Params.repo_url }}
+
+      <a href="{{ . }}" target="_blank">
+        [ REPOSITORY ]
+      </a>
+
+    {{ end }}
+
+  </section>
 
   {{ end }}
 
-</div>
+
+</article>
 
 
 {{ end }}
